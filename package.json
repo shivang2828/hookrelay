@@ -1,0 +1,37 @@
+{
+  "name": "hookrelay",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Reliable webhook delivery service: HMAC-signed payloads, idempotent ingestion, retries with exponential backoff and jitter, dead-letter queue and replay, and a transactional outbox so no event is ever lost.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://shivang2828@github.com/shivang2828/hookrelay.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivang2828/hookrelay/issues"
+  },
+  "homepage": "https://github.com/shivang2828/hookrelay#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.0"
+  }
+}

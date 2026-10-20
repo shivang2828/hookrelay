@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // Output modern JavaScript; Node 22 supports ES2022 natively
+    "target": "ES2022",
+
+    // Modern Node ES modules (matches "type": "module" in package.json).
+    // With NodeNext, relative imports need the .js extension: import { app } from "./app.js"
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // Turn on all strict checks (strictNullChecks, noImplicitAny, ...). Non-negotiable.
+    "strict": true,
+
+    // arr[0] and obj[key] are typed as "T | undefined", which catches empty-array / missing-key bugs
+    "noUncheckedIndexedAccess": true,
+
+    // TypeScript source lives in src/, compiled JavaScript goes to dist/
+    "rootDir": "src",
+    "outDir": "dist",
+
+    // Import older CommonJS packages with normal "import x from" syntax
+    "esModuleInterop": true,
+
+    // Don't type-check library type files in node_modules (faster builds)
+    "skipLibCheck": true,
+
+    // Stack traces point to your .ts lines instead of the compiled .js
+    "sourceMap": true,
+
+    // Fail the build if two files differ only by letter case (avoids Windows vs Linux bugs)
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
+}
