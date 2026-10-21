@@ -1,0 +1,47 @@
+# Local infrastructure for HookRelay: PostgreSQL (source of truth) + Redis (job queue).
+# Start:   docker compose up -d
+# Status:  docker compose ps        (both should say "healthy")
+# Stop:    docker compose down      (add -v to also delete the database data)
+#
+# Values come from .env (Compose reads it automatically from this folder).
+
+name: hookrelay # containers become hookrelay-postgres-1, hookrelay-redis-1
+
+services:
+  postgres:
+    image: postgres:17 # pin the major version so everyone runs the same database
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432" # yourPC:container, so the app on your PC can reach it at localhost:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data # named volume: data survives container restarts
+    # "Running" is not "ready": Postgres needs a few seconds before it accepts connections.
+    # pg_isready reports when it's actually ready, and Docker marks the container "healthy".
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    # appendonly = Redis writes every change to disk, so queued jobs survive a Redis restart
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"] # replies PONG when ready
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:
