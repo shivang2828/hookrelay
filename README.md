@@ -26,4 +26,5 @@ npm run dev                 # http://localhost:3000/health
 
 ## Progress
 - [x] Day 1: TypeScript + Express skeleton, fail-fast config, JSON 404/500 handling, Docker Compose
-- [ ] Day 2: PostgreSQL schema + migrations
+- [x] Day 2: PostgreSQL schema (6 tables) with Drizzle migrations: unique/check/FK constraints, partial index for the dispatcher
+- [ ] Day 3: API keys + endpoints CRUD with Zod validation

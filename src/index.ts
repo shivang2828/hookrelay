@@ -2,6 +2,7 @@
 // Importing config first means a missing env var stops the app right here, before anything starts.
 import { config } from "./config.js";
 import { createApp } from "./app.js";
+import { pool } from "./db/client.js";
 
 const app = createApp();
 
@@ -14,7 +15,11 @@ const server = app.listen(config.port, () => {
 // so no client gets cut off mid-response. (We'll extend this on Day 10 for queue workers.)
 function shutdown(signal: string) {
   console.log(`${signal} received, shutting down...`);
-  server.close(() => process.exit(0));
+  // 1) stop taking new HTTP requests and let in-flight ones finish,
+  // 2) then close the database pool so Postgres connections are released cleanly
+  server.close(() => {
+    pool.end().finally(() => process.exit(0));
+  });
 }
 
 process.on("SIGTERM", () => shutdown("SIGTERM"));
